@@ -10,4 +10,4 @@ Open maze_robot.ino with the arduino IDE to upload to an arduino.
 From the terminal, run `$ make` and `$ ./test`
 This will run a simulation of the maze solving and print the progress to the terminal:
 
-![alt text](https://github.com/filipbystricky/maze-robot/screenshots/simulation.png)
+![alt text](https://github.com/filipbystricky/maze-robot/blob/master/screenshots/simulation.png)

@@ -8,6 +8,6 @@ Open maze_robot.ino with the arduino IDE to upload to an arduino.
 
 # tests/extras
 From the terminal, run `$ make` and `$ ./test`
-This will run a simulation of the maze solving and print the progress to the terminal:
+This will run a simulation of the maze solving and print the maze to the terminal (a dot in a cell means the cell was visited during the search):
 
 ![alt text](https://github.com/filipbystricky/maze-robot/blob/master/screenshots/simulation.png)

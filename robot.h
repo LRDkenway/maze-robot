@@ -12,7 +12,7 @@ class Robot {
     } PINS;
 
     static const struct thresholds {
-        uint16_t WALL, WALL_CLOSE, FRONT_WALL_CLOSE;
+        int16_t WALL, WALL_CLOSE, FRONT_WALL_CLOSE;
     } THRESHOLDS;
 
     static const uint8_t NUM_READINGS = 5;
@@ -45,11 +45,11 @@ class Robot {
         digitalWrite(PINS.RIGHT_DIR, LOW);
     }
 
-    void step_motors(int delay);
+    void step_motors(unsigned int delay);
 
-    void step_left(int delay);
+    void step_left(unsigned int delay);
 
-    void step_right(int delay);
+    void step_right(unsigned int delay);
 
     void turn(Direction towards);
 

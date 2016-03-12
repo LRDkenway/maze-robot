@@ -19,7 +19,10 @@
 
 #define digitalWrite(x,y)
 #define pinMode(x,y)
-#define delayMicroseconds(x)
+
+#include <unistd.h>
+#define delayMicroseconds(x) usleep((x)/1000000)
+
 #define analogRead(x) 0
 #define micros() 0
 

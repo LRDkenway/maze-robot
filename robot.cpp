@@ -5,7 +5,7 @@
 const Robot::pins Robot::PINS = {2, 3, 4, 5, 0, 1, 2};
 const Robot::thresholds Robot::THRESHOLDS = {200, 300, 250};
 
-void Robot::step_motors(int delay) {
+void Robot::step_motors(unsigned int delay) {
     unsigned long delta;
 
     digitalWrite(PINS.RIGHT_MOTOR, HIGH);
@@ -25,7 +25,7 @@ void Robot::step_motors(int delay) {
     }
 }
 
-void Robot::step_left(int delay) {
+void Robot::step_left(unsigned int delay) {
     digitalWrite(PINS.LEFT_MOTOR, HIGH);
     update_readings();
     delayMicroseconds(delay);
@@ -34,7 +34,7 @@ void Robot::step_left(int delay) {
     delayMicroseconds(delay);
 }
 
-void Robot::step_right(int delay) {
+void Robot::step_right(unsigned int delay) {
     digitalWrite(PINS.RIGHT_MOTOR, HIGH);
     update_readings();
     delayMicroseconds(delay);
@@ -44,7 +44,7 @@ void Robot::step_right(int delay) {
 }
 
 void Robot::turn(Direction towards) {
-    int steps = TURN_STEPS;
+    uint16_t steps = TURN_STEPS;
 
     if (towards == Directions::left(facing)) {
         left_motor_backward();
@@ -60,7 +60,7 @@ void Robot::turn(Direction towards) {
         return; //don't need to turn because already facing the right way
     }
 
-    for (int i = 0; i < steps; i++) {
+    for (uint16_t i = 0; i < steps; i++) {
         step_motors(STEP_DELAY);
     }
 
@@ -74,7 +74,7 @@ void Robot::move(Direction dir) {
     right_motor_forward();
 
 
-    for (int i = 0; i < CELL_STEPS; i++) {
+    for (uint16_t i = 0; i < CELL_STEPS; i++) {
         if (is_wall_front_close) {
             return;
         }

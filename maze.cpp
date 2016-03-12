@@ -4,7 +4,6 @@
 #ifdef VERBOSE_DFS
 
 #ifdef TEST
-#include <unistd.h>
 #define print_state(room_i, goal_room_i) print(room_i, goal_room_i); usleep(100000)
 #else
 #define print_state(room_i, goal_room_i) print(room_i, goal_room_i)

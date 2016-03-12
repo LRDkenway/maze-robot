@@ -6,23 +6,29 @@
 class Room;
 
 class Robot {
-    static const struct pins {
-        uint8_t RIGHT_MOTOR, RIGHT_DIR, LEFT_MOTOR, LEFT_DIR,
-                LEFT_SENSOR, RIGHT_SENSOR, FRONT_SENSOR;
-    } PINS;
+    struct PINS {
+        static const uint8_t RIGHT_MOTOR = 2,
+                             RIGHT_DIR = 3,
+                             LEFT_MOTOR = 4,
+                             LEFT_DIR = 5,
+                             LEFT_SENSOR = 0,
+                             RIGHT_SENSOR = 1,
+                             FRONT_SENSOR = 2;
+    };
 
-    static const struct thresholds {
-        int16_t WALL, WALL_CLOSE, FRONT_WALL_CLOSE;
-    } THRESHOLDS;
+    struct THRESHOLDS {
+        static const int16_t WALL = 200,
+                             WALL_CLOSE = 300,
+                             FRONT_WALL_CLOSE = 250;
+    };
+
+    struct STEPS {
+        static const uint16_t CELL = 280,
+                              TURN = 105,
+                              DELAY = 1300; //microseconds
+    };
 
     static const uint8_t NUM_READINGS = 5;
-
-    static const uint16_t CELL_STEPS = 280,
-                          TURN_STEPS = 105,
-                          STEP_DELAY = 1300;//4000,
-
-
-    Direction facing;
 
     int left_readings[NUM_READINGS];
     int right_readings[NUM_READINGS];
@@ -31,18 +37,19 @@ class Robot {
     uint8_t is_wall_left, is_wall_right, is_wall_front;
     uint8_t is_wall_left_close, is_wall_right_close, is_wall_front_close;
 
+    Direction facing;
 
     inline void left_motor_forward(void) {
-        digitalWrite(PINS.LEFT_DIR, LOW);
+        digitalWrite(PINS::LEFT_DIR, LOW);
     }
     inline void left_motor_backward(void) {
-        digitalWrite(PINS.LEFT_DIR, HIGH);
+        digitalWrite(PINS::LEFT_DIR, HIGH);
     }
     inline void right_motor_forward(void) {
-        digitalWrite(PINS.RIGHT_DIR, HIGH);
+        digitalWrite(PINS::RIGHT_DIR, HIGH);
     }
     inline void right_motor_backward(void) {
-        digitalWrite(PINS.RIGHT_DIR, LOW);
+        digitalWrite(PINS::RIGHT_DIR, LOW);
     }
 
     void step_motors(unsigned int delay);

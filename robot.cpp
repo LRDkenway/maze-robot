@@ -2,49 +2,40 @@
 #include "robot.h"
 #include "room.h"
 
-const Robot::pins Robot::PINS = {2, 3, 4, 5, 0, 1, 2};
-const Robot::thresholds Robot::THRESHOLDS = {200, 300, 250};
 
 void Robot::step_motors(unsigned int delay) {
-    unsigned long delta;
+    digitalWrite(PINS::RIGHT_MOTOR, HIGH);
+    digitalWrite(PINS::LEFT_MOTOR, HIGH);
 
-    digitalWrite(PINS.RIGHT_MOTOR, HIGH);
-    digitalWrite(PINS.LEFT_MOTOR, HIGH);
+    delayMicroseconds(delay - update_readings());
 
-    delta = update_readings();
-    if (delta < delay) {
-        delayMicroseconds(delay - delta);
-    }
+    digitalWrite(PINS::RIGHT_MOTOR, LOW);
+    digitalWrite(PINS::LEFT_MOTOR, LOW);
 
-    digitalWrite(PINS.RIGHT_MOTOR, LOW);
-    digitalWrite(PINS.LEFT_MOTOR, LOW);
-
-    delta = update_readings();
-    if (delta < delay) {
-        delayMicroseconds(delay - delta);
-    }
+    delayMicroseconds(delay - update_readings());
 }
 
 void Robot::step_left(unsigned int delay) {
-    digitalWrite(PINS.LEFT_MOTOR, HIGH);
-    update_readings();
-    delayMicroseconds(delay);
-    digitalWrite(PINS.LEFT_MOTOR, LOW);
-    update_readings();
-    delayMicroseconds(delay);
+    digitalWrite(PINS::LEFT_MOTOR, HIGH);
+
+    delayMicroseconds(delay - update_readings());
+
+    digitalWrite(PINS::LEFT_MOTOR, LOW);
+
+    delayMicroseconds(delay - update_readings());
 }
 
 void Robot::step_right(unsigned int delay) {
-    digitalWrite(PINS.RIGHT_MOTOR, HIGH);
+    digitalWrite(PINS::RIGHT_MOTOR, HIGH);
     update_readings();
     delayMicroseconds(delay);
-    digitalWrite(PINS.RIGHT_MOTOR, LOW);
+    digitalWrite(PINS::RIGHT_MOTOR, LOW);
     update_readings();
     delayMicroseconds(delay);
 }
 
 void Robot::turn(Direction towards) {
-    uint16_t steps = TURN_STEPS;
+    uint16_t steps = STEPS::TURN;
 
     if (towards == Directions::left(facing)) {
         left_motor_backward();
@@ -61,7 +52,7 @@ void Robot::turn(Direction towards) {
     }
 
     for (uint16_t i = 0; i < steps; i++) {
-        step_motors(STEP_DELAY);
+        step_motors(STEPS::DELAY);
     }
 
     facing = towards;
@@ -74,16 +65,16 @@ void Robot::move(Direction dir) {
     right_motor_forward();
 
 
-    for (uint16_t i = 0; i < CELL_STEPS; i++) {
+    for (uint16_t i = 0; i < STEPS::CELL; i++) {
         if (is_wall_front_close) {
             return;
         }
         if (is_wall_left_close) {
-            step_left(STEP_DELAY / 2);
+            step_left(STEPS::DELAY / 2);
         } else if (is_wall_right_close) {
-            step_right(STEP_DELAY / 2);
+            step_right(STEPS::DELAY / 2);
         }
-        step_motors(STEP_DELAY);
+        step_motors(STEPS::DELAY);
     }
 }
 
@@ -117,28 +108,28 @@ unsigned long Robot::update_readings(void) {
     shift_right(front_readings, NUM_READINGS);
 
     //take a reading
-    left_readings[0] = analogRead(PINS.LEFT_SENSOR);
-    right_readings[0] = analogRead(PINS.RIGHT_SENSOR);
-    front_readings[0] = analogRead(PINS.FRONT_SENSOR);
+    left_readings[0] = analogRead(PINS::LEFT_SENSOR);
+    right_readings[0] = analogRead(PINS::RIGHT_SENSOR);
+    front_readings[0] = analogRead(PINS::FRONT_SENSOR);
 
     int left_avg = avg(left_readings, NUM_READINGS),
         right_avg = avg(right_readings, NUM_READINGS),
         front_avg = avg(front_readings, NUM_READINGS);
 
-    is_wall_left = left_avg > THRESHOLDS.WALL;
-    is_wall_right = right_avg > THRESHOLDS.WALL;
-    is_wall_front = front_avg > THRESHOLDS.WALL;
+    is_wall_left = left_avg > THRESHOLDS::WALL;
+    is_wall_right = right_avg > THRESHOLDS::WALL;
+    is_wall_front = front_avg > THRESHOLDS::WALL;
 
-    is_wall_left_close = left_avg > THRESHOLDS.WALL_CLOSE;
-    is_wall_right_close = right_avg > THRESHOLDS.WALL_CLOSE;
-    is_wall_front_close = front_avg > THRESHOLDS.FRONT_WALL_CLOSE;
+    is_wall_left_close = left_avg > THRESHOLDS::WALL_CLOSE;
+    is_wall_right_close = right_avg > THRESHOLDS::WALL_CLOSE;
+    is_wall_front_close = front_avg > THRESHOLDS::FRONT_WALL_CLOSE;
 
     return micros() - start;
 }
 
 void Robot::init_pins(void) {
-    pinMode(PINS.LEFT_MOTOR, OUTPUT);
-    pinMode(PINS.LEFT_DIR, OUTPUT);
-    pinMode(PINS.RIGHT_MOTOR, OUTPUT);
-    pinMode(PINS.RIGHT_DIR, OUTPUT);
+    pinMode(PINS::LEFT_MOTOR, OUTPUT);
+    pinMode(PINS::LEFT_DIR, OUTPUT);
+    pinMode(PINS::RIGHT_MOTOR, OUTPUT);
+    pinMode(PINS::RIGHT_DIR, OUTPUT);
 }

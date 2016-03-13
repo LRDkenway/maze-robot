@@ -5,8 +5,6 @@
 #include "constants.h"
 
 
-#define STACK_SIZE (((NUM_ROWS * NUM_COLS) / 16) + 1)
-
 typedef uint8_t Direction;
 
 class Directions {
@@ -30,10 +28,13 @@ public:
 };
 
 class DirStack {
-    static const uint32_t MASK = 0x3; //3 = 00000011, for masking individual directions
-    static const uint8_t MAX_LAST_DIR = 32; //number of bits in uint32_t
+    typedef uint32_t Element;
 
-    uint32_t elts[STACK_SIZE]; //each direction only needs 2 bits, so 16 directions can fit inside one int
+    static const uint8_t STACK_SIZE = ((NUM_ROWS * NUM_COLS) / 16) + 1;
+    static const Element MASK = 0x3; //3 = 00000011, for masking individual directions
+    static const uint8_t MAX_LAST_DIR = (sizeof(Element)) * 8; //number of bits in Element
+
+    Element elts[STACK_SIZE]; //each direction only needs 2 bits, so 16 directions can fit inside one int
     uint8_t last_int, last_dir;
 
 public:

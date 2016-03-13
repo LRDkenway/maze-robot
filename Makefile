@@ -18,5 +18,5 @@ all: $(HEADERS) $(EXECS) maze_extras.cpp
 # bare: $(HEADERS) $(EXECS)
 # 	g++ $(CPPFLAGS) -o test $(EXECS)
 
-# clean:
-# 	rm -f test
+clean:
+	rm -rf test test.dSYM

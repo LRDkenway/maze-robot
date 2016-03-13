@@ -22,7 +22,7 @@ static void shuffle_array(Direction directions[]) {
 	}
 }
 
-int Maze::get_rand_neighbor(uint8_t *room_i) {
+int Maze::get_rand_neighbor(RoomIndex *room_i) {
 	static Direction directions[4] = {0, 1, 2, 3};
 
 	uint8_t room_row = *room_i / NUM_COLS,
@@ -33,8 +33,9 @@ int Maze::get_rand_neighbor(uint8_t *room_i) {
 	for (uint8_t i = 0; i < 4; i++) {
 		Direction dir = directions[i];
 		uint8_t next_row = room_row + Y_INCR[dir],
-		        next_col = room_col + X_INCR[dir],
-		        neighbor_i = get_index(next_row, next_col);
+		        next_col = room_col + X_INCR[dir];
+
+		RoomIndex neighbor_i = get_index(next_row, next_col);
 
 		if (is_in_range(next_row, next_col) && !rooms[neighbor_i].is_visited()) {
 
@@ -48,10 +49,10 @@ int Maze::get_rand_neighbor(uint8_t *room_i) {
 	return 0;
 }
 
-void Maze::drunken_walk(uint8_t room_i) {
+void Maze::drunken_walk(RoomIndex room_i) {
 
-	uint8_t path[NUM_ROWS * NUM_COLS];
-	uint8_t last = 0;
+	RoomIndex path[NUM_ROWS * NUM_COLS];
+	RoomIndex last = 0;
 
 	clear_visited();
 
@@ -78,7 +79,7 @@ void Maze::drunken_walk(uint8_t room_i) {
 	}
 }
 
-void Maze::print(uint8_t robot_i, uint8_t goal_room_i) {
+void Maze::print(RoomIndex robot_i, RoomIndex goal_room_i) {
 	static const char arrows[] = {'^', '>', 'v', '<'};
 	print_out('\n');
 	//top
@@ -91,36 +92,36 @@ void Maze::print(uint8_t robot_i, uint8_t goal_room_i) {
 		//middle and bottom
 
 		for (uint8_t i = 0; i < NUM_COLS; i++) {
-			uint8_t room = get_index(j, i);
+			RoomIndex room_i = get_index(j, i);
 
-			print_out(rooms[room].is_open(Directions::WEST) ? "  " : "| ");
+			print_out(rooms[room_i].is_open(Directions::WEST) ? "  " : "| ");
 
-			if (room == goal_room_i) {
+			if (room_i == goal_room_i) {
 				print_out('x');
-			} else if (room == robot_i) {
+			} else if (room_i == robot_i) {
 				print_out('o');
-			} else if (rooms[room].is_solution()) {
-				print_out(arrows[rooms[room].get_next()]);
-			} else if (rooms[room].is_visited()) {
+			} else if (rooms[room_i].is_solution()) {
+				print_out(arrows[rooms[room_i].get_next()]);
+			} else if (rooms[room_i].is_visited()) {
 				print_out('.');
 			} else {
 				print_out(' ');
 			}
 			print_out(' ');
 
-			if (i == NUM_COLS - 1 && !rooms[room].is_open(Directions::EAST)) {
+			if (i == NUM_COLS - 1 && !rooms[room_i].is_open(Directions::EAST)) {
 				print_out('|');
 			}
 		}
 		print_out('\n');
 
 		for (uint8_t i = 0; i < NUM_COLS; i++) {
-			uint8_t room = get_index(j, i);
+			RoomIndex room_i = get_index(j, i);
 
-			print_out(rooms[room].is_open(Directions::WEST) ? '.' : '|');
-			print_out(rooms[room].is_open(Directions::SOUTH) ? "   " : "___");
+			print_out(rooms[room_i].is_open(Directions::WEST) ? '.' : '|');
+			print_out(rooms[room_i].is_open(Directions::SOUTH) ? "   " : "___");
 
-			if (i == NUM_COLS - 1 && !rooms[room].is_open(Directions::EAST)) {
+			if (i == NUM_COLS - 1 && !rooms[room_i].is_open(Directions::EAST)) {
 				print_out('|');
 			}
 		}
@@ -128,12 +129,12 @@ void Maze::print(uint8_t robot_i, uint8_t goal_room_i) {
 	}
 }
 
-void Maze::print_info(uint8_t goal_row, uint8_t goal_col) {
+void Maze::print_info(const uint8_t goal_row, const uint8_t goal_col) {
 	print(0, get_index(goal_row, goal_col));
 	print_out("maze size: ");
 	print_out(sizeof(Maze));
 	print_out("\nstack size: ");
-	print_out(sizeof(uint32_t) * STACK_SIZE);
+	print_out(sizeof(uint32_t) * (((NUM_ROWS * NUM_COLS) / 16) + 1));
 
 	print_out("\nrobot size: ");
 	print_out(sizeof(Robot));

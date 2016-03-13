@@ -1,6 +1,7 @@
 #ifndef __robot_h__
 #define __robot_h__
 
+#include <stdint.h>
 #include "direction.h"
 
 class Room;

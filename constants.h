@@ -1,10 +1,11 @@
 #ifndef __constants_h__
 #define __constants_h__
 
-#define VERBOSE_DFS
-#define VERBOSE_STACK
 
 #ifdef TEST
+
+#define VERBOSE_DFS
+#define VERBOSE_STACK
 
 #include <iostream>
 #define print_out(x) std::cout << (x);
@@ -35,8 +36,8 @@
 
 
 
-#define NUM_ROWS 13
-#define NUM_COLS 13
+#define NUM_ROWS 16
+#define NUM_COLS 16
 
 
 

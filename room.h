@@ -1,6 +1,8 @@
 #ifndef __room_h__
 #define __room_h__
 
+#include <stdint.h>
+
 class Room {
     //solution bit: is this room on the solution path
 

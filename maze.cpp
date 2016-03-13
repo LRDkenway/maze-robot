@@ -19,12 +19,12 @@ const uint8_t Maze::Y_INCR[] = { -1, 0, 1, 0};
 
 extern Robot robot;
 
-uint8_t Maze::move(const uint8_t room_i, const Direction dir) {
+Maze::RoomIndex Maze::move(const RoomIndex room_i, const Direction dir) {
     robot.move(dir);
     return get_index((room_i / NUM_COLS) + Y_INCR[dir], (room_i % NUM_COLS) + X_INCR[dir]);
 }
 
-int Maze::get_neighbor(const uint8_t room_i, Direction *neighbor) {
+int Maze::get_neighbor(const RoomIndex room_i, Direction *neighbor) {
     uint8_t room_row = room_i / NUM_COLS,
             room_col = room_i % NUM_COLS;
     for (Direction dir = 0; dir < 4; dir++) {
@@ -43,7 +43,7 @@ int Maze::get_neighbor(const uint8_t room_i, Direction *neighbor) {
     return 0;
 }
 
-int Maze::dfs(uint8_t room_i, const uint8_t goal_room_i) {
+int Maze::dfs(RoomIndex room_i, const RoomIndex goal_room_i) {
     DirStack moves;
 
     Direction dir, neighbor;
@@ -79,7 +79,7 @@ int Maze::dfs(uint8_t room_i, const uint8_t goal_room_i) {
         //found an unvisited neighbor
         moves.push(neighbor); //store the move on the move stack
         room_i = move(room_i, neighbor);
-        print_state(room_i, get_index(NUM_ROWS / 2, NUM_COLS / 2));
+        print_state(room_i, goal_room_i);
     }
 }
 

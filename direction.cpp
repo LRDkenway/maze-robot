@@ -29,7 +29,7 @@ static const char *dirs[] = {" N ", " E ", " S ", " W "};
 #endif /* VERBOSE_STACK */
 
 void DirStack::push(const Direction dir) {
-    const uint32_t elt = dir;
+    const Element elt = dir;
 
     //set the bits to 0
     elts[last_int] &= ~(MASK << last_dir);
@@ -64,9 +64,12 @@ Direction DirStack::pop(void) {
 
 #ifdef VERBOSE_STACK
 void DirStack::print(void) {
-    uint8_t elt, dir_i;
+    uint8_t elt_i, dir_i;
 
     Direction dir;
+
+    print_out("\nMax last dir:");
+    print_out((int) MAX_LAST_DIR);
 
     print_out("\nLast int:");
     print_out((int) last_int);
@@ -79,14 +82,14 @@ void DirStack::print(void) {
 
     print_out('\n');
 
-    for (elt = 0; elt < last_int; elt++) {
+    for (elt_i = 0; elt_i < last_int; elt_i++) {
         for (dir_i = 0; dir_i < MAX_LAST_DIR; dir_i += 2) {
-            dir = (elts[elt] >> dir_i) & MASK;
+            dir = (elts[elt_i] >> dir_i) & MASK;
             print_out(dirs[dir]);
         }
     }
     for (dir_i = 0; dir_i < last_dir; dir_i += 2) {
-        dir = (elts[elt] >> dir_i) & MASK;
+        dir = (elts[elt_i] >> dir_i) & MASK;
         print_out(dirs[dir]);
     }
     print_out('\n');

@@ -9,10 +9,7 @@ typedef uint8_t Direction;
 
 class Directions {
 public:
-    static const Direction NORTH = 0,
-                           EAST = 1,
-                           SOUTH = 2,
-                           WEST = 3;
+    static const Direction NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
 
     static inline Direction opposite(Direction dir) {
         return dir < 2 ? dir + 2 : dir - 2;

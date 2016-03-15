@@ -7,30 +7,30 @@ void Robot::step_motors(unsigned int delay) {
     digitalWrite(PINS::RIGHT_MOTOR, HIGH);
     digitalWrite(PINS::LEFT_MOTOR, HIGH);
 
-    delayMicroseconds(delay - update_readings());
+    delayMicroseconds(delay - readings.update());
 
     digitalWrite(PINS::RIGHT_MOTOR, LOW);
     digitalWrite(PINS::LEFT_MOTOR, LOW);
 
-    delayMicroseconds(delay - update_readings());
+    delayMicroseconds(delay - readings.update());
 }
 
 void Robot::step_left(unsigned int delay) {
     digitalWrite(PINS::LEFT_MOTOR, HIGH);
 
-    delayMicroseconds(delay - update_readings());
+    delayMicroseconds(delay - readings.update());
 
     digitalWrite(PINS::LEFT_MOTOR, LOW);
 
-    delayMicroseconds(delay - update_readings());
+    delayMicroseconds(delay - readings.update());
 }
 
 void Robot::step_right(unsigned int delay) {
     digitalWrite(PINS::RIGHT_MOTOR, HIGH);
-    update_readings();
+    readings.update();
     delayMicroseconds(delay);
     digitalWrite(PINS::RIGHT_MOTOR, LOW);
-    update_readings();
+    readings.update();
     delayMicroseconds(delay);
 }
 
@@ -66,12 +66,12 @@ void Robot::move(Direction dir) {
 
 
     for (uint16_t i = 0; i < STEPS::CELL; i++) {
-        if (is_wall_front_close) {
+        if (readings.is_wall_front_close) {
             return;
         }
-        if (is_wall_left_close) {
+        if (readings.is_wall_left_close) {
             step_left(STEPS::DELAY / 2);
-        } else if (is_wall_right_close) {
+        } else if (readings.is_wall_right_close) {
             step_right(STEPS::DELAY / 2);
         }
         step_motors(STEPS::DELAY);
@@ -81,9 +81,9 @@ void Robot::move(Direction dir) {
 void Robot::explore(Direction dir, Room *dest) {
     move(dir);
 
-    dest->set_open(Directions::left(facing), is_wall_left);
-    dest->set_open(Directions::right(facing), is_wall_right);
-    dest->set_open(facing, is_wall_front);
+    dest->set_open(Directions::left(facing), readings.is_wall_left);
+    dest->set_open(Directions::right(facing), readings.is_wall_right);
+    dest->set_open(facing, readings.is_wall_front);
 }
 
 static void shift_right(int arr[], const uint8_t len) {
@@ -100,7 +100,7 @@ static int avg(const int arr[], const uint8_t len) {
     return sum / len;
 }
 
-unsigned long Robot::update_readings(void) {
+unsigned long Robot::Readings::update(void) {
     unsigned long start = micros();
 
     shift_right(left_readings, NUM_READINGS);

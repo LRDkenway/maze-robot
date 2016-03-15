@@ -13,10 +13,7 @@ EXECS = direction.cpp robot.cpp maze.cpp test.cpp
 
 
 all: $(HEADERS) $(EXECS) maze_extras.cpp
-	g++ $(CPPFLAGS) -o test $(EXECS) maze_extras.cpp -DEXTRAS -DTEST
-
-# bare: $(HEADERS) $(EXECS)
-# 	g++ $(CPPFLAGS) -o test $(EXECS)
+	g++ $(CPPFLAGS) -o test $(EXECS) maze_extras.cpp -DTEST
 
 clean:
 	rm -rf test test.dSYM
